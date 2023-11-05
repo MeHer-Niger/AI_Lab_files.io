@@ -1,0 +1,82 @@
+import heapq
+
+class Node:
+    def __init__(self, city, g_cost, h_cost, parent=None):
+        self.city = city
+        self.g_cost = g_cost
+        self.h_cost = h_cost
+        self.parent = parent
+
+    def __lt__(self, other):
+        return (self.g_cost + self.h_cost) < (other.g_cost + other.h_cost)
+
+class Graph:
+    def __init__(self):
+        self.graph = {}
+
+    def add_edge(self, u, v, cost):
+        self.graph.setdefault(u, {})[v] = cost
+        self.graph.setdefault(v, {})[u] = cost
+
+    def get_neighbors(self, city):
+        return self.graph.get(city, {})
+
+class AStar:
+    def __init__(self, graph, start, goal):
+        self.graph = graph
+        self.start = start
+        self.goal = goal
+        self.frontier = []
+        self.explored = set()
+
+    def get_heuristic(self, city):
+        # Replace this with your actual heuristic calculation (e.g., straight-line distance)
+        return 0
+
+    def find_path(self):
+        heapq.heappush(self.frontier, Node(self.start, 0, self.get_heuristic(self.start)))
+
+        while self.frontier:
+            node = heapq.heappop(self.frontier)
+
+            if node.city == self.goal:
+                return node
+
+            if node.city not in self.explored:
+                self.explored.add(node.city)
+
+                for neighbor, cost in self.graph.get_neighbors(node.city).items():
+                    new_g_cost = node.g_cost + cost
+                    new_h_cost = self.get_heuristic(neighbor)
+                    new_node = Node(neighbor, new_g_cost, new_h_cost, node)
+
+                    heapq.heappush(self.frontier, new_node)
+
+        return None
+
+def main():
+    graph = Graph()
+
+    # Add the edges of the Romania map
+    graph.add_edge('Arad', 'Zerind', 75)
+    graph.add_edge('Arad', 'Timisoara', 118)
+    graph.add_edge('Arad', 'Sibiu', 140)
+    # Add the rest of the edges...
+
+    astar = AStar(graph, 'Arad', 'Bucharest')
+
+    path = astar.find_path()
+
+    # Print the path
+    if path is not None:
+        print("A* Path:")
+        while path is not None:
+            path = path.parent
+            print('    ->', path.city)
+          
+
+    else:
+        print('No path found.')
+
+if __name__ == '__main__':
+    main()

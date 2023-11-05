@@ -1,0 +1,11 @@
+gt(X,Y) :- X > Y.
+
+sort(List, Sorted) :-
+  swap(List, List1), !,           % A useful swap in List?
+  sort(List1, Sorted).
+sort(Sorted, Sorted).       % Otherwise list is already sorted
+
+swap([X,Y|Rest], [Y,X|Rest]) :-   % Swap first two elements
+  gt(X,Y).
+swap([Z|Rest], [Z|Rest1]) :-      % Swap elements in tail
+  swap(Rest, Rest1).

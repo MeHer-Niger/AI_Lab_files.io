@@ -1,0 +1,36 @@
+graph = {
+  '5' : ['3','7'],
+  '3' : ['2', '4'],
+  '7' : ['8'],
+  '2' : ['9'],
+  '4' : [],
+  '8' : [],
+  '9':[]
+}
+goal="9"
+depth=[0,0,0,0,0,0,0,0,0,0]
+depth[5]=1
+depth[3]=2
+depth[7]=2
+depth[2]=3
+depth[4]=3
+depth[8]=3
+depth[9]=4
+#print(graph)
+def dfs(visited, graph, node,i):
+  visited.append(node)
+  print(node)
+  if node==goal:
+      exit()
+  else:
+      for neighbour in graph[node]:
+        value=[int(x) for x in neighbour]
+        #print(value)
+        if depth[value[0]]<=i:
+          if neighbour not in visited:
+            dfs(visited,graph,neighbour,i)
+        
+for i in range(1,5):
+   print("The Depth-First Search Sequence for level ",i," is:")
+   visited=[]
+   dfs(visited, graph, '5',i)

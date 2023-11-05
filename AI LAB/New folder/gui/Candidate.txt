@@ -1,0 +1,17 @@
+candidate(rakib).
+candidate(hasan).
+candidate(riyad).
+
+ssc(3.5,rakib).
+hsc(4,rakib).
+hons(3.3,rakib).
+
+ssc(4,hasan).
+hsc(3.5,hasan).
+hons(3.7,hasan).
+
+ssc(4.5,riyad).
+hsc(3,riyad).
+hons(3.2,riyad).
+
+select_candidate(A,B,C,X) :- ssc(A,X),hsc(B,X),hons(C,X), A>=3.5, B>=3.4,C>3.2. 

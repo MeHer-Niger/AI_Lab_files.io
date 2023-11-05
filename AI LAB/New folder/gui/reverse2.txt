@@ -1,0 +1,5 @@
+reverse([],[]).
+reverse([Y],[Y]).
+reverse([Y|Ys],R) :- reverse(Ys,T) , append(T,[Y],R) .
+
+

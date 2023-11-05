@@ -1,0 +1,244 @@
+% hoofersclub.pl
+
+% Knowledge base representing the Hoofers Club problem ("Is there a member of
+% the Hoofers Club who is a mountain climber but not a skier?"). Written in
+% SWI Prolog (8.2.3).
+
+
+% Members of the Hoofers Club.
+hc(tony).
+hc(shi_kuo).
+hc(ellen).
+
+% Mountain climber vs. skier.
+m(X) :- hc(X), dislikes(X, rain), dislikes(X, snow).
+s(X) :- hc(X), likes(X, snow), likes(X, rain).
+
+% Ellen's weird obsession with Tony.
+dislikes(ellen, Y) :- likes(tony, Y).
+likes(ellen, Y) :- dislikes(tony, Y).
+
+% Tony likes H2O.
+likes(tony, rain).
+likes(tony, snow).
+
+
+The accompanying file hoofersclub.pl is a Prolog knowledge base. It is written in the SWI Prolog dialect (version 8.2.3). To solve the Hoofers Club problem, execute the following query:
+
+?- hc(X) , m(X), \+ s(X).
+
+
+
+
+%MianBiwi
+
+mianbiwi(chotakhan,chotirani).
+mianbiwi(barakhan,barirani).
+mianbiwi(salim,kausar).
+mianbiwi(asad,sumra).
+mianbiwi(nadir,nahid).
+mianbiwi(rizwan,sanam).
+
+%Parents.
+
+parent(chotakhan,kausar).
+parent(chotakhan,nadir).
+parent(chotakhan,asad).
+parent(chotirani,kausar).
+parent(chotirani,nadir).
+parent(chotirani,asad).
+
+parent(barakhan,nahid).
+parent(barakhan,sumra).
+parent(barirani,nahid).
+parent(barirani,sumra).
+
+parent(salim,rizwan).
+parent(kauser,rizwan).
+
+parent(asad,salima).
+parent(asad,sanam).
+parent(sumra,salima).
+parent(sumra,sanam).
+
+parent(nadir,burhan).
+parent(nadir,rashid).
+parent(nadir,akram).
+parent(nahid,burhan).
+parent(nahid,rashid).
+parent(nahid,akram).
+
+parent(rizwan,rabia).
+parent(sanam,rabia).
+
+%Gender.
+%male:
+gins(mard,chotakhan).
+gins(mard,barakhan).
+gins(mard,salim).
+gins(mard,asad).
+gins(mard,nadir).
+gins(mard,rizwan).
+gins(mard,burhan).
+gins(mard,rashid).
+gins(mard,akram).
+
+%female.
+gins(aurat,chotirani).
+gins(aurat,barirani).
+gins(aurat,kausar).
+gins(aurat,sumra).
+gins(aurat,nahid).
+gins(aurat,sanam).
+gins(aurat,salima).
+gins(aurat,rabia).
+
+%Relations.
+%
+baap(Baap,Bacha) :- parent(Baap,Bacha),gins(mard,Baap).
+maan(Maan,Bacha):-parent(Maan,Bacha),gins(aurat,Maan).
+beti(Beti,Waldeen):-parent(Waldeen,Beti),gins(aurat,Beti).
+beta(Beta,Waldeen):-parent(Waldeen,Beta),gins(mard,Beta).
+dada(Dada,Pota):-baap(Dada,X),baap(X,Pota).
+nana(Nana,Pota):-baap(Nana,X),maan(X,Pota).
+dadi(Dadi,Pota):-maan(Dadi,X),baap(X,Pota).
+nani(Nani,Pota):-maan(Nani,X),maan(X,Pota).
+sussar(Sussar,Me):-gins(mard,Me),mianbiwi(Me,X),baap(Sussar,X)
+|gins(aurat,Me),mianbiwi(X,Me),baap(Sussar,X).
+sala(Sala,Me):-sussar(X,Me),baap(X,Sala),gins(mard,Sala).
+behn(Behn,Man):-baap(Y,Behn),baap(Y,Man),gins(aurat,Behn),not(Behn=Man).
+bhai(Bhai,Man):-baap(Y,Bhai),baap(Y,Man),gins(mard,Bhai),not(Bhai=Man).
+
+khala(Khala,Me):-behn(Khala,X),maan(X,Me),gins(aurat,Khala).
+
+chacha(Chacha,Me):-bhai(Chacha,X),baap(X,Me),gins(mard,Chacha).
+
+
+
+
+
+/* All students are smart */
+smart(S):-student(S).
+
+/* Whoever is smart is powerful */
+powerful(S):-smart(S).
+
+/* Whoever is computer scientist and professor is powerful */
+powerful(S):-cs(S),prof(S).
+
+/* Computer scientists are crazy */
+crazy(S):-cs(S).
+
+/* Alan is a student */
+student(alan).
+
+/* Brad is a student */
+student(brad).
+
+/* Colin is a computer scientist */
+cs(colin).
+
+/* Colin is a professor */
+prof(colin).
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%     Author: Ziad Alnagar     %%%
+%%%   Last Updated: 1st May 21   %%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% To-do: Uncle, Aunt, Grandparents.
+
+male(tom).
+male(harlan).
+male(joel).
+male(fred).
+male(bobby).
+male(krish).
+male(mark).
+male(jesson).
+male(jhon).
+male(ban).
+
+female(may).
+female(destiney).
+female(reyna).
+female(alina).
+female(lorena).
+female(celeste).
+female(kirsten).
+female(adalyn).
+female(molly).
+female(juliana).
+
+parent(tom, juliana).
+parent(may, juliana).
+parent(tom, molly).
+parent(may, molly).
+parent(may, adalyn).
+parent(harlan, ban).
+parent(destiney, ban).
+parent(joel, jhon).
+parent(juliana, jhon).
+parent(molly, jesson).
+parent(ban, jesson).
+
+% Lists
+males(L) :- findall(X, male(X), L).
+females(L) :- findall(X, female(X), L).
+people(L) :- findall(X, (male(X) ; female(X)), L).
+siblings(L) :- setof([X,Y], (parent(Z, X), parent(Z, Y), \+ X==Y), L).
+
+% find_in_list(X) :- (males(L) ; females(L)), member(X, L).
+is_person(X) :- (people(L)), member(X, L), write(X), write(' exists').
+
+father(X, Y) :- parent(X, Y), male(X).
+mother(X, Y) :- parent(X, Y), female(X).
+% ex: has_children(may, L)
+has_children(X, L) :- findall(Y, parent(X, Y), L), (father(X, _) -> write(X), write(' is father of '), write(L)) ;
+findall(Y, parent(X, Y), L), (mother(X, _) -> write(X), write(' is mother of '), write(L)).
+
+are_siblings(X,Y) :- siblings(L), member([X,Y], L).
+brother(X, Y) :- sibling(X, Y), male(X), write(X), write(' is brother to '), write(Y).
+sister(X, Y) :- sibling(X, Y), female(X), write(X), write(' is sister to '), write(Y).
+
+
+
+
+
+
+
+
+
+
+
+father(jack, susan).
+father(jack, ray).
+father(david, liza). 
+father(david, john).
+father(john, peter). 
+father(john, mary). 
+mother(karen, susan). 
+mother(karen, ray). 
+mother(amy, liza). 
+mother(amy, john). 
+mother(susan, peter). 
+mother(susan, mary).
+mother(mary, paul).
+mother(mary, jone).
+father(paul, grace).
+mother(grace, peris).
+parent(X, C):- father(X, C); mother(X, C).
+
+grandfather(F, G):- father(F, T), parent(T, G).
+grandmother(F, G):- mother(F, T), parent(T, G).
+
+greatgrandfather(F, G):- father(F, T), parent(T, R), parent(R, G).
+greatgrandmother(F, G):- mother(F, T), parent(T, R), parent(R, G).
+
+greatgreatgrandfather(F, G):- father(F, T), parent(T, R),parent(R, V) parent(V, G).
+greatgreatgrandmother(F, G):- mother(F, T), parent(T, R),parent(R, V) parent(V, G).
+
+
